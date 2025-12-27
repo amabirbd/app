@@ -9,7 +9,13 @@ export default defineConfig({
       '/api': {
         target: 'http://localhost:3001',
         changeOrigin: true,
-        secure: false
+        secure: false,
+        bypass(req) {
+          // Don't proxy requests for files with extensions (like .ts, .tsx, .js, etc.)
+          if (req.url && /\.\w+$/.test(req.url.split('?')[0])) {
+            return req.url;
+          }
+        },
       }
     }
   }
